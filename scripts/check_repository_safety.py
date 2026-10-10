@@ -17,7 +17,7 @@ IDENTITY_POLICY = "docs/security/approved-git-identities.json"
 HISTORY_REVIEW = "docs/security/reviewed-history.json"
 # Existing findings are recorded to prevent regressions, not to approve public disclosure.
 NOREPLY = re.compile(
-    r"(?:[A-Za-z0-9+_.\[\]-]+@(?:users\.)?noreply\.github\.com|noreply@github\.com)", re.ASCII
+    r"(?:[A-Za-z0-9+_.\[\]-]+@(?:users\.)?noreply\.github\.com|noreply@github\.com)", re.ASCII,
 )
 RAW_LOG_NAME = re.compile(
     r"(?:studium_(?:output|test_out|test_output|tests)|"
@@ -25,7 +25,7 @@ RAW_LOG_NAME = re.compile(
     re.IGNORECASE,
 )
 RAW_LOG_TEXT = re.compile(
-    r"(?m)^(?:=+ test session starts =+|Traceback \(most recent call last\):)$"
+    r"(?m)^(?:=+ test session starts =+|Traceback \(most recent call last\):)$",
 )
 IDENTITY_TRAILERS = {
     "co-authored-by",
@@ -116,7 +116,7 @@ REVIEW_SUFFIXES = {
 }
 PLACEHOLDERS = re.compile(
     r"(?i)^(?:|test|dummy|example|placeholder|changeme|replace_me|your[_ -].*|"
-    r"\$\{.*\}|<.*>|synthetic.*|not[_ -]a[_ -].*)$"
+    r"\$\{.*\}|<.*>|synthetic.*|not[_ -]a[_ -].*)$",
 )
 TOKEN_RULES = (
     ("private-key", re.compile(r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----")),
@@ -138,11 +138,11 @@ TOKEN_RULES = (
 )
 ASSIGNMENT = re.compile(
     r"(?im)[\"']?\b(?:[A-Z0-9_]*(?:api_key|access_token|auth_token|client_secret|"
-    r"password|passwd|secret_key))[\"']?[ \t]*[:=][ \t]*[\"']([^\"'\r\n]{8,})[\"']"
+    r"password|passwd|secret_key))[\"']?[ \t]*[:=][ \t]*[\"']([^\"'\r\n]{8,})[\"']",
 )
 ENV_ASSIGNMENT = re.compile(
     r"(?im)^[ \t]*(?:export[ \t]+)?[A-Z0-9_]*(?:API_KEY|ACCESS_TOKEN|AUTH_TOKEN|CLIENT_SECRET|"
-    r"PASSWORD|PASSWD|SECRET_KEY)[ \t]*=[ \t]*([^\s\"'#]{8,})[ \t]*\r?$"
+    r"PASSWORD|PASSWD|SECRET_KEY)[ \t]*=[ \t]*([^\s\"'#]{8,})[ \t]*\r?$",
 )
 EMAIL = re.compile(r"\b[\w.+-]+@([\w.-]+\.[A-Za-z]{2,})\b")
 PHONE = re.compile(r"\+7[ (.-]*\d{3}[ ).-]*\d{3}[ .-]*\d{2}[ .-]*\d{2}\b")
@@ -200,12 +200,12 @@ def scan_text(path: str, value: str, object_id: str | None = None) -> list[Findi
         for match in pattern.finditer(value):
             findings.append(
                 Finding(
-                    path, rule, line=value.count("\n", 0, match.start()) + 1, object_id=object_id
-                )
+                    path, rule, line=value.count("\n", 0, match.start()) + 1, object_id=object_id,
+                ),
             )
     for match in ASSIGNMENT.finditer(value):
         if not PLACEHOLDERS.fullmatch(match[1]) and not match[1].startswith(
-            ("os.environ", "environ.")
+            ("os.environ", "environ."),
         ):
             findings.append(
                 Finding(
@@ -213,11 +213,11 @@ def scan_text(path: str, value: str, object_id: str | None = None) -> list[Findi
                     "literal-credential",
                     line=value.count("\n", 0, match.start()) + 1,
                     object_id=object_id,
-                )
+                ),
             )
     for match in ENV_ASSIGNMENT.finditer(value):
         if not PLACEHOLDERS.fullmatch(match[1]) and not match[1].startswith(
-            ("os.", "environ", "$")
+            ("os.", "environ", "$"),
         ):
             findings.append(
                 Finding(
@@ -225,7 +225,7 @@ def scan_text(path: str, value: str, object_id: str | None = None) -> list[Findi
                     "env-credential",
                     line=value.count("\n", 0, match.start()) + 1,
                     object_id=object_id,
-                )
+                ),
             )
     for match in EMAIL.finditer(value):
         if match[1].lower() not in {
@@ -242,7 +242,7 @@ def scan_text(path: str, value: str, object_id: str | None = None) -> list[Findi
                     "review",
                     value.count("\n", 0, match.start()) + 1,
                     object_id,
-                )
+                ),
             )
     for match in MACHINE_PATH.finditer(value):
         if match[1].lower() not in {"public", "default", "<user>", "test", "example", "synthetic"}:
@@ -253,13 +253,13 @@ def scan_text(path: str, value: str, object_id: str | None = None) -> list[Findi
                     "review",
                     value.count("\n", 0, match.start()) + 1,
                     object_id,
-                )
+                ),
             )
     for match in PHONE.finditer(value):
         findings.append(
             Finding(
-                path, "phone-review", "review", value.count("\n", 0, match.start()) + 1, object_id
-            )
+                path, "phone-review", "review", value.count("\n", 0, match.start()) + 1, object_id,
+            ),
         )
     return findings
 
@@ -396,7 +396,7 @@ def scan_pending_identity(root: Path, *, staged: bool = False) -> list[Finding]:
 
 
 def check_content(
-    path: str, data: bytes, policy: dict, object_id: str | None = None, *, historical=False
+    path: str, data: bytes, policy: dict, object_id: str | None = None, *, historical=False,
 ) -> list[Finding]:
     findings = []
     rule = forbidden_path(path)
@@ -437,8 +437,8 @@ def check_content(
                 else:
                     text_findings.append(
                         Finding(
-                            path, "unapproved-git-identity-policy", "review", object_id=object_id
-                        )
+                            path, "unapproved-git-identity-policy", "review", object_id=object_id,
+                        ),
                     )
             findings.extend(text_findings)
         except UnicodeError:
@@ -474,7 +474,7 @@ def index_entries(root: Path) -> dict[str, tuple[str, str]]:
 
 
 def scan_tree(
-    root: Path, *, staged: bool = False, worktree: bool = False
+    root: Path, *, staged: bool = False, worktree: bool = False,
 ) -> tuple[list[Finding], dict]:
     policy = load_policy(root, staged=staged)
     entries = index_entries(root)
@@ -482,7 +482,7 @@ def scan_tree(
         changed = set(
             git(root, "diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z")
             .decode()
-            .split("\0")
+            .split("\0"),
         )
         entries = {p: v for p, v in entries.items() if p in changed}
     elif worktree:
@@ -520,7 +520,7 @@ def history_roots(root: Path) -> list[str]:
     roots = set(git(root, "rev-list", "--all").decode().splitlines())
     for ref in git(root, "for-each-ref", "--format=%(refname)").decode().splitlines():
         result = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", f"{ref}^{{tree}}"], capture_output=True
+            ["git", "-C", str(root), "rev-parse", f"{ref}^{{tree}}"], capture_output=True,
         )
         if result.returncode:
             raise ValueError("Unsupported ref type: manual history review required")
@@ -558,7 +558,7 @@ def scan_history(root: Path) -> tuple[list[Finding], dict]:
                     "object_id": oid,
                     "bytes": len(data),
                     "sha256": hashlib.sha256(data).hexdigest(),
-                }
+                },
             )
     legacy_contacts = []
     for oid in git(root, "rev-list", "--all").decode().splitlines():
@@ -568,7 +568,7 @@ def scan_history(root: Path) -> tuple[list[Finding], dict]:
         )
         identity_findings = scan_identity(author, author_email, "author", policy, oid)
         identity_findings.extend(
-            scan_identity(committer, committer_email, "committer", policy, oid)
+            scan_identity(committer, committer_email, "committer", policy, oid),
         )
         if (
             policy.get("legacy_contact_metadata", {}).get(oid)
@@ -597,11 +597,11 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(
-        "--staged", action="store_true", help="Check changed index bytes, not working files"
+        "--staged", action="store_true", help="Check changed index bytes, not working files",
     )
     mode.add_argument("--history", action="store_true", help="All reachable commits and tree refs")
     mode.add_argument(
-        "--worktree", action="store_true", help="Tracked plus unignored untracked files"
+        "--worktree", action="store_true", help="Tracked plus unignored untracked files",
     )
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument(
@@ -632,18 +632,18 @@ def main(argv=None) -> int:
         if args.report:
             args.report.parent.mkdir(parents=True, exist_ok=True)
             args.report.write_text(
-                json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf8"
+                json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf8",
             )
         for finding in findings:
             print(
-                f"{finding.severity}: {finding.path} [{finding.rule}] line={finding.line} object={finding.object_id}"
+                f"{finding.severity}: {finding.path} [{finding.rule}] line={finding.line} object={finding.object_id}",
             )
         print(
-            f"{stats['mode']}: {stats.get('files_checked', stats.get('path_versions'))} checked; {len(errors)} errors; {len(reviews)} manual-review signals"
+            f"{stats['mode']}: {stats.get('files_checked', stats.get('path_versions'))} checked; {len(errors)} errors; {len(reviews)} manual-review signals",
         )
         if stats.get("legacy_contact_commits"):
             print(
-                f"Known historical contact metadata: {len(stats['legacy_contact_commits'])} commits; public release still requires an owner decision"
+                f"Known historical contact metadata: {len(stats['legacy_contact_commits'])} commits; public release still requires an owner decision",
             )
         # Privacy signals need a human decision too; never silently label them PASS.
         return 1 if findings else 0

@@ -23,7 +23,7 @@ class Namespace:
             )
         if self.value.startswith("-") or self.value.endswith("-"):
             raise InvalidIdError(
-                "Namespace cannot start or end with a hyphen", invalid_value=self.value
+                "Namespace cannot start or end with a hyphen", invalid_value=self.value,
             )
 
     def __str__(self) -> str:
@@ -33,7 +33,8 @@ class Namespace:
 @dataclass(frozen=True)
 class Id:
     """An immutable, opaque unique identifier for a Bender artifact.
-    Backed by a UUIDv4 string to guarantee independence from contents and paths."""
+    Backed by a UUIDv4 string to guarantee independence from contents and paths.
+    """
 
     value: str
 
@@ -47,7 +48,7 @@ class Id:
                 object.__setattr__(self, "value", str(val))
         except ValueError:
             raise InvalidIdError(
-                "Invalid ID format. Must be a valid UUIDv4 string.", invalid_value=self.value
+                "Invalid ID format. Must be a valid UUIDv4 string.", invalid_value=self.value,
             )
 
     @classmethod
