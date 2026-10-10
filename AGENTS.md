@@ -18,7 +18,18 @@ task/session IDs, old Git metadata, secrets или operational records.
 Policies target-scoped: reviewed material hashes, только подтверждённые noreply,
 пустые history contact/raw-log exceptions. Hook не обходить.
 
-Новые remote/push/PR/Actions/Jules session changes и publication требуют
-соответствующего разрешения. Текущие sessions не останавливать/retarget без
-учёта residual work. Required CI приоритетны; second reviewer отдельно.
-Не выбирать license/final remote name и не переписывать source history.
+Разработку ведёт только владелец при помощи Jules; внешние PR не входят
+в текущий процесс. Целевой репозиторий — COLOSSAL-maksik/Bender, Public,
+основная ветка main. Лицензирование определено в README: All rights reserved,
+открытая лицензия не предоставлена; лицензии сторонних компонентов сохраняются.
+
+После initial push изменения main проходят через PR; обязательные approvals
+и второй reviewer не требуются. Force-push и удаление main запрещены.
+Required CI checks добавляются отдельно после появления workflows и первых
+успешных проверок; отсутствующие checks не требовать.
+
+Push/PR, запуск Actions и изменения sessions Jules требуют соответствующего
+разрешения. Bootstrap сам по себе не разрешает запуск Actions. Текущие sessions
+не останавливать/retarget без учёта residual work. Новую задачу Jules не запускать
+автоматически. Не менять лицензирование без решения владельца и не переписывать
+существующую Git history.
