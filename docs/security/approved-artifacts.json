@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "review": "2026-10-10: exact target hashes; local English/Russian OCR, PNG metadata and DOCX nested XML/properties/relationships checked; source synthetic/provenance review matched unchanged bytes. Publication rights/license reviewed separately.",
+  "artifacts": {},
+  "blocked_sha256": {},
+  "redactions": {}
+}

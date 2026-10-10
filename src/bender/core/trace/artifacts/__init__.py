@@ -1,0 +1,2 @@
+class SolutionTrace:
+    pass
