@@ -190,7 +190,7 @@ def create_case_3() -> Axial1DBenchmark:
                     eps_mech=lambda x: Fraction(1, 2) - x / Fraction(20),
                     eps_full=lambda x: Fraction(1, 2) - x / Fraction(20),
                     u=lambda x: x / Fraction(2) - (x**2) / Fraction(40),
-                )
+                ),
             ],
         ),
     )
@@ -275,7 +275,7 @@ def create_case_5() -> Axial1DBenchmark:
                 Fraction(0),
                 alpha=Fraction(1, 1000),
                 delta_T=Fraction(50),
-            )
+            ),
         ],
         point_loads=[],
         supports=[Support(Fraction(0), Fraction(0)), Support(L, Fraction(0))],
@@ -290,7 +290,7 @@ def create_case_5() -> Axial1DBenchmark:
                     eps_mech=lambda x: Fraction(-1, 20),
                     eps_full=lambda x: Fraction(0),
                     u=lambda x: Fraction(0),
-                )
+                ),
             ],
         ),
     )
@@ -328,7 +328,7 @@ def create_case_6() -> Axial1DBenchmark:
                     eps_mech=lambda x: Fraction(1, 50),
                     eps_full=lambda x: Fraction(1, 50),
                     u=lambda x: x / Fraction(50),
-                )
+                ),
             ],
         ),
     )

@@ -22,8 +22,7 @@ class OperationRecord:
 
 @dataclass(frozen=True)
 class Provenance:
-    """
-    Immutable model of data provenance: what artifacts this artifact is derived from,
+    """Immutable model of data provenance: what artifacts this artifact is derived from,
     and what operation created it.
     """
 

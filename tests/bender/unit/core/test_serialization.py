@@ -103,10 +103,10 @@ print(compute_fingerprint(obj))
     env2["PYTHONHASHSEED"] = "2"
 
     res1 = subprocess.run(
-        ["python", str(script_path)], env=env1, capture_output=True, text=True, check=True
+        ["python", str(script_path)], env=env1, capture_output=True, text=True, check=True,
     )
     res2 = subprocess.run(
-        ["python", str(script_path)], env=env2, capture_output=True, text=True, check=True
+        ["python", str(script_path)], env=env2, capture_output=True, text=True, check=True,
     )
 
     assert res1.stdout.strip() == res2.stdout.strip()

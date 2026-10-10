@@ -9,8 +9,7 @@ from bender.core.serialization.json import ValidJsonType
 
 @dataclass(frozen=True)
 class VersionedArtifact:
-    """
-    The envelope for serialized Bender artifacts.
+    """The envelope for serialized Bender artifacts.
     Contains identity, provenance, versioning info, and the payload.
     """
 
@@ -22,8 +21,7 @@ class VersionedArtifact:
     provenance: Provenance = field(default_factory=Provenance.empty)
 
     def fingerprint(self) -> str:
-        """
-        Computes the fingerprint of the meaningful contents.
+        """Computes the fingerprint of the meaningful contents.
         Excludes the instance ID, but includes namespace, schema, and payload.
         Provenance is intentionally excluded from the mathematical fingerprint,
         as identical outputs can come from different sources, but is retained in the envelope.

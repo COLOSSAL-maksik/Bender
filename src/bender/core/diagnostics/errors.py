@@ -1,7 +1,6 @@
 class BenderError(Exception):
     """Base exception for all Bender-specific errors."""
 
-    pass
 
 
 class InvalidIdError(BenderError):
@@ -24,7 +23,6 @@ class SerializationError(BenderError):
 class DeserializationError(BenderError):
     """Raised when JSON parsing fails (e.g., syntax errors, duplicate keys)."""
 
-    pass
 
 
 class UnknownSchemaError(BenderError):
@@ -40,7 +38,7 @@ class UnsupportedVersionError(BenderError):
 
     def __init__(self, schema_name: str, version: int, max_supported: int):
         super().__init__(
-            f"Unsupported version {version} for schema {schema_name}. Max supported is {max_supported}."
+            f"Unsupported version {version} for schema {schema_name}. Max supported is {max_supported}.",
         )
         self.schema_name = schema_name
         self.version = version
@@ -52,7 +50,7 @@ class MigrationError(BenderError):
 
     def __init__(self, message: str, schema_name: str, from_version: int, to_version: int):
         super().__init__(
-            f"Migration error ({schema_name} v{from_version} -> v{to_version}): {message}"
+            f"Migration error ({schema_name} v{from_version} -> v{to_version}): {message}",
         )
         self.schema_name = schema_name
         self.from_version = from_version

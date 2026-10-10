@@ -88,7 +88,7 @@ def test_bender_does_not_import_studium():
 def test_bender_core_does_not_import_forbidden():
     core_dir = SRC_DIR / "bender" / "core"
     violations = check_no_imports(
-        core_dir, ["bender.domains", "bender.methods", "bender.reference", "bender.adapters"]
+        core_dir, ["bender.domains", "bender.methods", "bender.reference", "bender.adapters"],
     )
     assert not violations, f"Forbidden imports found in bender.core: {violations}"
 
@@ -131,7 +131,7 @@ def test_architecture_test_handles_relative_imports(tmp_path):
     pkg_dir.mkdir(parents=True)
     dummy_file = pkg_dir / "foo.py"
     dummy_file.write_text(
-        "from ..reference import y\nfrom .bar import x\nfrom ...studium import z\nimport os\nfrom ... import reference\n"
+        "from ..reference import y\nfrom .bar import x\nfrom ...studium import z\nimport os\nfrom ... import reference\n",
     )
 
     imports = extract_imports(str(dummy_file))
@@ -149,7 +149,7 @@ def test_architecture_test_catches_absolute_aliases(tmp_path):
     # Tests that `from bender import reference` is correctly tracked as `bender.reference`
     dummy_file = tmp_path / "dummy.py"
     dummy_file.write_text(
-        "from bender import reference\nfrom bender import reference as ref\nfrom bender.methods import foo\n"
+        "from bender import reference\nfrom bender import reference as ref\nfrom bender.methods import foo\n",
     )
 
     imports = extract_imports(str(dummy_file))
@@ -200,7 +200,7 @@ def test_bender_core_catches_absolute_aliases_violations(tmp_path):
     core_dir.mkdir(parents=True)
     dummy_file = core_dir / "bad_core.py"
     dummy_file.write_text(
-        "from bender import domains\nfrom bender import methods as meth\nfrom bender.adapters import something\n"
+        "from bender import domains\nfrom bender import methods as meth\nfrom bender.adapters import something\n",
     )
 
     # We should catch violations if we check

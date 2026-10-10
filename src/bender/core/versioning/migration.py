@@ -9,13 +9,12 @@ from bender.core.versioning.dto import VersionedArtifact
 
 # A migration function takes a payload and returns the new payload
 MigrationFunction = Callable[
-    [dict | list | str | int | float | bool | None], dict | list | str | int | float | bool | None
+    [dict | list | str | int | float | bool | None], dict | list | str | int | float | bool | None,
 ]
 
 
 class SchemaMigrationRegistry:
-    """
-    Registry for schema migrations.
+    """Registry for schema migrations.
     Provides explicit paths to upgrade older DTO payloads to the current version.
     """
 
@@ -38,8 +37,7 @@ class SchemaMigrationRegistry:
         self._migrations[schema_name][from_version] = func
 
     def migrate(self, artifact: VersionedArtifact) -> VersionedArtifact:
-        """
-        Migrates the artifact to the current registered version for its schema.
+        """Migrates the artifact to the current registered version for its schema.
         Raises specific errors if the schema is unknown, the version is from the future,
         or a transition is missing.
         """
@@ -50,7 +48,7 @@ class SchemaMigrationRegistry:
 
         if artifact.schema_version > target_version:
             raise UnsupportedVersionError(
-                artifact.schema_name, artifact.schema_version, target_version
+                artifact.schema_name, artifact.schema_version, target_version,
             )
 
         if artifact.schema_version == target_version:

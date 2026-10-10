@@ -17,10 +17,10 @@ def test_versioned_artifact_fingerprint_excludes_id_and_provenance():
     payload = {"data": 123}
 
     art1 = VersionedArtifact(
-        id=id1, namespace=ns, schema_name="test_schema", schema_version=1, payload=payload
+        id=id1, namespace=ns, schema_name="test_schema", schema_version=1, payload=payload,
     )
     art2 = VersionedArtifact(
-        id=id2, namespace=ns, schema_name="test_schema", schema_version=1, payload=payload
+        id=id2, namespace=ns, schema_name="test_schema", schema_version=1, payload=payload,
     )
 
     assert art1.id != art2.id
